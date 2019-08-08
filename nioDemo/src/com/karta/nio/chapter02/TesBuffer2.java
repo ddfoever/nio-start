@@ -94,9 +94,11 @@ public class TesBuffer2 {
     public  void test2() throws IOException{
         long start = System.currentTimeMillis();
         FileChannel inChannel = FileChannel.open(Paths.get("D:\\1.exe"),StandardOpenOption.READ);
+        //StandardOpenOption 的CREATE 如果存在就是覆盖，CREATE_NEW 如果存在就会报错
         FileChannel outChannel = FileChannel.open(Paths.get("D:\\2.exe"),StandardOpenOption.WRITE,StandardOpenOption.READ,StandardOpenOption.CREATE);
 
         //创建buffer 通过channel.map 的方式获取buffer 它和ByteBuffer.allocateDirect()原理一样，并且只有byteMappbuffer
+        //MapMode.READ_WRITE 要与outChannel 中StandardOpenOption 的权限一致 必须也是 read 和wirte
         MappedByteBuffer inMap = inChannel.map(FileChannel.MapMode.READ_ONLY,0,inChannel.size());
         MappedByteBuffer outMap =outChannel.map(FileChannel.MapMode.READ_WRITE,0,inChannel.size());
 
@@ -126,6 +128,7 @@ public class TesBuffer2 {
             outChannel = FileChannel.open(Paths.get("D:\\2.exe"),StandardOpenOption.WRITE,StandardOpenOption.READ,StandardOpenOption.CREATE);
 
             inChannel.transferTo(0,inChannel.size(),outChannel);
+            //outChannel.transferFrom(inChannel,0,inChannel.size());
 
         } catch (IOException e) {
             e.printStackTrace();
