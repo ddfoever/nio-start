@@ -9,9 +9,9 @@ import java.nio.ByteBuffer;
 public class TestBuffer {
     public static void main(String[] args) {
         TestBuffer testBuffer = new TestBuffer();
-        //testBuffer.Test1();
+        testBuffer.Test1();
 
-        testBuffer.test2();
+        //testBuffer.test2();
     }
 
     public void Test1(){
