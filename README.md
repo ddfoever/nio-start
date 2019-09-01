@@ -42,6 +42,23 @@
     1.transferFrom
     2.transferTo
     
+分散读取与聚集写入
+
+    分散读取: 指channel 按顺序依次读取数据到buffer
+    聚集写入: 指Channel 按顺序依次将buffer的数据写入到channle中
+获取字符集CharSet
+        
+        Map<String,Charset> map = Charset.availableCharsets();
+            Set<Map.Entry<String,Charset>> sets = map.entrySet();
+            for(Map.Entry<String,Charset> ch:sets){
+                System.out.println(ch.getValue());
+            }
+
+
+NIO之非阻塞 
+
+               
+            
     
 
 

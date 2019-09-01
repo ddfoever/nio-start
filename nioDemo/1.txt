@@ -1,0 +1,32 @@
+java基于NIO的分散读取文件，然后统一聚合后写入文件
+分散读取：对于一个文件，可以分散的读取数据，可以快速的读取，好比多个线程在分段同时读取；
+
+聚合写入：为了提高效率，一般读取到的数据都是分散的，要快速写入，就需要把分散的数据聚集在一起，然后一块写入到文件；
+
+具体代码如下：
+
+         //首先创建一个随机访问文件
+  RandomAccessFile raf= new RandomAccessFile("test.txt", "rw");
+  //根据随机获取通道
+  FileChannel channel = raf.getChannel();
+  //分配指定大小指定缓冲区
+  ByteBuffer buf1=ByteBuffer.allocateDirect(200);
+  ByteBuffer buf2=ByteBuffer.allocateDirect(1024);
+  // 分散读取
+  ByteBuffer[] bufs={buf1,buf2};
+  channel.read(bufs);//采用通道分散读取数据
+  for (ByteBuffer byteBuffer : bufs) {
+      // 切换成读模式
+      byteBuffer.flip();
+  }
+  System.out.println(new String(bufs[0].array(),0,bufs[0].limit()));
+  System.out.println("-------------------------------------------------");
+  System.out.println(new String(bufs[1].array(),1,bufs[1].limit()));
+  System.out.println("------聚集写入---------");
+          //创建一个随机写入文件
+  RandomAccessFile raf2= new RandomAccessFile("test2.txt", "rw");
+  //获取写入通道
+  FileChannel channel2 = raf2.getChannel();
+  channel2.write(bufs);//采用通道写入数据
+  raf2.close();//关闭
+  raf.close();//关闭
